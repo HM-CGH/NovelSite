@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- namespace :  mapper interface의 패키지명+인터페이스명 -->  
+<mapper namespace="com.novel.NovelProject.mapper.SerMapper">
+	
+	<!-- 시리즈 리스트 조회 -->
+	<select id="getSerList">
+		select *
+		from(select rownum rn, t.*
+			from(select series_id, name category_id, user_id, title, s.description, s.created_date 
+				from series s
+				join categories c using (category_id)
+				<if test="searchField != '' and searchField != ''">
+					where ${searchField} like '%${searchWord}%'
+				</if>
+				order by s.created_date desc) t)
+		where rn between ((#{pageNo}*#{amount})-(#{amount}-1)) and (#{pageNo}*#{amount})
+	</select>
+
+	<!-- 검색어에 따른 총 게시물 수 조회 -->
+	<select id="totalCnt">
+		select count(*) from series
+			<if test="searchField != '' and searchField != ''">
+				where ${searchField} like '%${searchWord}%'
+			</if>
+	</select>
+
+	<!-- 유저가 작성한 시리즈 조회 -->
+	<select id="getUserSerList">
+		select * from series where user_id = #{user_id}
+	
+	</select>
+	
+	
+	<!-- 에피소드 등록 -->
+	<insert id="regEpi">
+		<selectKey keyProperty="episode_id" resultType="String" order="BEFORE">
+	  		select 'EPI'||LPAD(SEQ_EPI_ID.NEXTVAL, 10, '0') from dual
+	  	</selectKey>
+		INSERT INTO EPISODES VALUES(#{episode_id}, #{series_id} , #{title}, ${episode_num}, #{content}, SYSDATE, 0)
+	</insert>
+	
+	
+	<!-- 시리즈 등록 -->
+	<insert id="regSer">
+		<selectKey keyProperty="series_id" resultType="String" order="BEFORE">
+	  		select 'SER'||LPAD(SEQ_SER_ID.NEXTVAL, 5, '0') from dual
+	  	</selectKey>
+		INSERT INTO SERIES (series_id, category_id, user_id, title, description, created_date) 
+				VALUES(#{series_id}, #{category_id}, #{user_id}, #{title}, #{description}, SYSDATE)
+	</insert>
+	
+	<!-- 에피소드 총 갯수 -->
+	<select id="totalEpiCnt">
+		
+
+	select count(*)
+	from(select episode_id, s.title series_id, e.title title, episode_num, user_id, e.created_date created_date, counts
+           from episodes e, series s
+           where e.series_id = s.series_id)
+       <choose>
+           <when test="searchField !='' and searchField != null and searchField != 'all'">
+               where ${searchField} like '%${searchWord}%'
+           </when>
+           <when test="searchField !='' and searchField != null and searchField == 'all'">
+               where title like '%${searchWord}%' or series_id like '%${searchWord}%'
+           </when>
+           <otherwise>
+           </otherwise>
+       </choose>
+				
+	</select>
+
+
+	<!-- 에피소드 리스트 조회 -->
+	<select id="getEpiList">
+	
+		select *
+	         from(select rownum rn, episode_id, series_id, title,episode_num, user_id, counts, decode(to_char(created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(created_date,'hh24:mi:ss'), to_char(created_date,'yyyy-mm-dd')) created_date 
+	             from(select *
+	                 from(select episode_id, s.title series_id, e.title title, episode_num, user_id, e.created_date created_date, counts
+	                     from episodes e, series s
+	                     where e.series_id = s.series_id)
+	                <choose>
+			           <when test="searchField !='' and searchField != null and searchField != 'all'">
+			               where ${searchField} like '%${searchWord}%'
+			           </when>
+			           <when test="searchField !='' and searchField != null and searchField == 'all'">
+			               where title like '%${searchWord}%' or series_id like '%${searchWord}%'
+			           </when>
+			           <otherwise>
+			           </otherwise>
+			       </choose>
+	                 order by created_date desc) t)           
+	   	where rn between ((#{pageNo}*#{amount})-(#{amount}-1)) and (#{pageNo}*#{amount})
+	</select>
+
+	<!-- 시리즈별 에피소드 조회 -->
+	<select id="getSerEpiList">
+		select *
+		from(select rownum rn, t.*
+			from(select *
+				from(select episode_id, s.title series_id, e.title title, episode_num, user_id, decode(to_char(e.created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(e.created_date,'hh24:mi:ss'), to_char(e.created_date,'yyyy-mm-dd')) created_date, counts
+	                from episodes e, series s
+	                where e.series_id = s.series_id
+	                and e.series_id = #{series_id})
+				<if test="cri.searchField != '' and cri.searchField != ''">
+					where ${cri.searchField} like '%${cri.searchWord}%'
+				</if>
+				order by created_date desc) t)
+		where rn between ((#{cri.pageNo}*#{cri.amount})-(#{cri.amount}-1)) and (#{cri.pageNo}*#{cri.amount})
+	
+	</select>
+
+
+	<select id="totalSerEpiCnt">
+		select count(*)
+		from(select rownum rn, t.*
+			from(select *
+				from(select episode_id, s.title series_id, e.title title, episode_num, user_id, decode(to_char(e.created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(e.created_date,'hh24:mi:ss'), to_char(e.created_date,'yyyy-mm-dd')) created_date
+	                from episodes e, series s
+	                where e.series_id = s.series_id
+	                and e.series_id = #{series_id})
+				<if test="cri.searchField != '' and cri.searchField != ''">
+					where ${cri.searchField} like '%${cri.searchWord}%'
+				</if>
+				order by created_date desc) t)
+	</select>
+	
+	
+	<select id="getDetailEpi">
+		select *
+		from(select episode_id, e.series_id series_id, e.title title, s.title ser_title, episode_num, user_id, content, decode(to_char(e.created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(e.created_date,'hh24:mi:ss'), to_char(e.created_date,'yyyy-mm-dd')) created_date, counts
+             from episodes e, series s
+             where  s.series_id=e.series_id)
+        where episode_id = #{episode_id}
+	</select>
+	
+	
+	<update id="updateEpi">
+		update episodes
+		set episode_num = #{episode_num}, title=#{title}, content=#{content}
+		where episode_id = #{episode_id}
+	</update>
+	
+	
+	<delete id="delEpi">
+		delete episodes
+		where episode_id = #{episode_id}
+	
+	</delete>
+	
+	<select id="findEpiNum">
+		select episode_num
+		from(select rownum, t.*
+			from(select episode_num
+				from episodes
+				where series_id =#{series_id}
+				order by 1 desc) t
+			where rownum = 1)
+	
+	</select>
+	
+	<select id="getSeries">
+		select series_id
+		from episodes
+		where episode_id=#{episode_id}
+	
+	</select>
+	
+	
+	<select id="getPrevEpi">
+		select *
+		from (select episode_id, e.series_id series_id, e.title title, s.title ser_title, episode_num, user_id, content, decode(to_char(e.created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(e.created_date,'hh24:mi:ss'), to_char(e.created_date,'yyyy-mm-dd')) created_date, counts
+             from episodes e, series s
+             where e.series_id = s.series_id)
+		where series_id=#{series_id}
+		and episode_num=#{episode_num}-1
+	
+	</select>
+	
+	<select id="getNextEpi">
+		select *
+		from (select episode_id, e.series_id series_id, e.title title, s.title ser_title, episode_num, user_id, content, decode(to_char(e.created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(e.created_date,'hh24:mi:ss'), to_char(e.created_date,'yyyy-mm-dd')) created_date, counts
+             from episodes e, series s
+             where e.series_id = s.series_id)
+		where series_id=#{series_id}
+		and episode_num=#{episode_num}+1
+	
+	</select>
+	
+	
+	<select id="getSerEpiNum">
+		select count(*)
+		from episodes
+		where series_id = #{series_id}
+	
+	</select>
+	
+	
+	<select id="getSerDto">
+		select *
+		from series
+		where series_id = #{series_id}
+	</select>
+	
+	<select id="getCateName">
+		select c.category_id category_id, name
+		from categories c, series s
+		where c.category_id = s.category_id
+		and series_id = #{series_id}
+	</select>
+	
+</mapper>
+
+

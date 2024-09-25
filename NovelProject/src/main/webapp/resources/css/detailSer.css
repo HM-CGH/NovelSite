@@ -1,0 +1,22 @@
+@charset "UTF-8";
+#container{
+	width: 700px;
+	height: 1000px;
+	margin: 0px auto;
+	text-align: center;
+}
+#table_thumb{
+	width: 250px;
+}
+#searchForm{
+	float: left;
+}
+#searchList{
+	width: 700px;
+}
+#numList{
+	float: right;
+}
+#regBtn{
+	float: right;
+}

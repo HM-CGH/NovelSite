@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- namespace :  mapper interface의 패키지명+인터페이스명 -->  
+<mapper namespace="com.novel.NovelProject.mapper.FileMapper">
+
+	<insert id="regFile">
+		INSERT INTO ATTACHMENTS (attachment_id, type, type_id, idx, ofile_name, sfile_name, uploaded_date) 
+			VALUES('ATTA'||LPAD(SEQ_ATTA_ID.NEXTVAL, 10, '0')
+			, #{type}, #{type_id}, #{idx}, #{ofile_name}, #{sfile_name}, SYSDATE)
+	</insert>
+
+
+	<select id="getFile">
+		select * from attachments
+			where type = #{type} and type_id = #{type_id}
+	</select>
+
+	<delete id="delFile">
+		delete attachments
+		where type=#{type} and type_id=#{type_id}
+	</delete>
+
+
+</mapper>

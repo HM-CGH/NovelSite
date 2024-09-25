@@ -1,0 +1,24 @@
+@charset "UTF-8";
+#container{
+		width: 700px;
+		margin: 0px auto;
+}
+#container>td{
+	text-align: center;
+}
+#contentBox{
+	width: 700px;
+	height: 100%;
+	overflow: visible;
+	white-space: pre-wrap; 
+	overflow-y: auto; 
+	min-height:500px;
+}
+.imgBox{
+	width: 180px;
+	height: 220px;
+	background-size: contain;  
+}
+#delform{
+	display: inline-block;
+}
