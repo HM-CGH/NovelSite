@@ -213,6 +213,14 @@
 		where c.category_id = s.category_id
 		and series_id = #{series_id}
 	</select>
+	<select id="getMainPage">
+		SELECT EPISODE_ID, SERIES_ID, SER_TITLE, TITLE, EPISODE_NUM, CONTENT, CREATED_DATE, COUNTS
+		FROM(SELECT EPISODE_ID, E.SERIES_ID, S.TITLE SER_TITLE, E.TITLE TITLE, EPISODE_NUM, CONTENT, E.CREATED_DATE CREATED_DATE, COUNTS
+		    FROM EPISODES E, SERIES S
+		    WHERE E.SERIES_ID = S.SERIES_ID
+		    ORDER BY COUNTS DESC)
+		WHERE ROWNUM &lt; 7
+	</select>
 	
 </mapper>
 

@@ -81,6 +81,9 @@ public interface SerMapper {
 	// 시리즈 아이디로 카테고리 찾아서 카테고리 이름 가져오기
 	public CateDto getCateName(@Param("series_id") String series_id);
 
+	// 메인페이지 에피소드 top6 가져오기
+	public List<EpiDto> getMainPage();
+
 	
 	
 	
