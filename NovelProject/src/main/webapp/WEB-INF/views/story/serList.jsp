@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>시리즈 목록</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <link href="resources/css/main.css"  rel="stylesheet">
 
 <!-- js파일로 따로 분리시 EL언어를 인식 못함. -->

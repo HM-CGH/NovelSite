@@ -5,22 +5,26 @@
 		width: 800px;
 		height: 1000px;
 		margin: 0px auto;
-		justify-content: space-around;
+		justify-content: space-between;
 	}
 .card{
 	display: inline-block;
-	margin: 20px;
+	margin: 0px;
+	width: 360px;
+	height:300px;
 }
 #container{
-	width: 700px;
-	height: 700px;
+	width: 800px;
+	min-height: 650px;
+	
 	margin: 0px auto;
 	text-align: center;
 	
 }
 #containerEpi{
 	width: 800px;
-	height: 700px;
+	min-height: 650px;
+	max-height:1300px;
 	margin: 0px auto;
 	text-align: center;
 }
@@ -28,10 +32,55 @@
 	float: right;
 }
 #numList{
-	width: 700px;
-	margin-bottom: 20px;
+	display:flex;
+	justify-content:space-between;
+	width: 800px;
+	
 }
 #searchForm{
-	float: left;
-	margin-bottom: 20px;
+	
+	margin-top: 20px;
+	margin-bottom: 40px;
+	
+}
+#containerEpi > table{
+	text-overflow: ellipsis
+}
+.form-control{
+	padding-left:10px;
+}
+img{
+	border: 2px;
+	display:flex;
+	justify-content:center;
+	margin: 0px auto;
+	object-fit:none;
+	float: center;
+}
+#mainHeader{
+	text-align: center;
+	font-family:fantasy;
+	margin: 20px;
+}
+#serTable{
+	width:800px;
+}
+.epiNumFont{
+	margin:0;
+	padding:0;
+	font-size: 0.9rem;
+	
+}
+.card-text{
+	margin:5px 0px 5px 0px;
+	font-weight: 600;
+}
+.card-body p:nth-child(1) {
+	font-size: 1.2rem;
+}
+.card-body{
+	border-top:1px solid gray;
+}
+.card{
+	cursor:pointer;
 }

@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>에피소드 목록</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <link href="resources/css/main.css"  rel="stylesheet">
 </head>
 <%@include file="/WEB-INF/views/common/header.jsp" %>
@@ -20,6 +21,21 @@ window.addEventListener('load', function(){
 			location.href='/detailEpi?episode_id='+no+'&pageNo=${map.pageDto.pageNo}';
 		})
 	})	
+	
+	let amount = document.querySelector("#amountSelect");
+	amount.addEventlistener('change', function(){
+		let data={
+				'searchField' : searchField.value,
+				'searchWord' : searchWord.value,
+				'pageNo' : pageNo.value,
+				'amount' : amountSelect.value
+			}
+		fetch("/resEpiList")
+			.then((response) => response.json())
+			.then((data) => console.log(data))
+	})
+	
+	
 })
 function go(pageNo){
 	searchForm.pageNo.value = pageNo;
@@ -45,7 +61,7 @@ function go(pageNo){
 				<button onclick='go(1)' class="btn btn-outline-secondary" type="submit">검색</button>
 			</div>
 			<div class="col-1">
-				<input type="hidden" name="pageNo" value="${param.pageNo }">
+				<input type="hidden" name="pageNo" id="pageNo" value="${param.pageNo }">
 			</div>	
 			<div style="float: right" class="col-3">
 				<select name="amount" class="form-select" id="amountSelect">

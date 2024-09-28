@@ -17,7 +17,7 @@
 	
 	  <!-- ------------------------로그인 폼------------------------ -->
 	  <form action="/loginAction" method="post" id="loginForm">
-	    <img class="mb-4" alt="" width="72" height="57">
+	    
 	    <h1 class="h3 mb-3 fw-normal">로그인</h1>
 		${msg}
 	    <div class="form-floating">

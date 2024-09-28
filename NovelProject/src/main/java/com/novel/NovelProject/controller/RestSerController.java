@@ -1,16 +1,20 @@
 package com.novel.NovelProject.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.novel.NovelProject.dto.CriteriaDto;
 import com.novel.NovelProject.dto.SerDto;
 import com.novel.NovelProject.service.SerService;
 
@@ -36,4 +40,15 @@ public class RestSerController {
 		return new ResponseEntity<String>(jsonMsg, header, HttpStatus.OK ); 
 	}
 	
+	
+	@GetMapping(value="/resEpiList")
+	public  ResponseEntity<Map<String, Object>> resEpiList(@RequestBody CriteriaDto cri, Model model) {
+		// series_id 정보 가져가서 해당되는 epi list 조회해서 map에 담기. 회차검색위해 검색어 필요.
+		
+		Map<String, Object> map = ser.getEpiList(cri);
+		model.addAttribute("map", map);
+		
+		
+		return ResponseEntity.ok(map); 
+	}
 }
