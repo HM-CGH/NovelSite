@@ -71,18 +71,19 @@
 			  </select>
 			</div>
 			<div class="col-5">
-				<input name="searchWord" value="${param.searchWord }" type="search" class="form-control" >
+				<input name="searchWord" id="searchWord" value="${param.searchWord }" type="search" class="form-control" >
 			</div>
 			<div class="text-end">
 				<button onclick='go(1)' class="btn btn-outline-secondary" type="submit">검색</button>
 			</div>
 			<div class="col-1">
-				<input type="hidden" name="pageNo" value="${param.pageNo }">
-				<input type="hidden" name="series_id" value="${param.series_id }">
+				<input type="hidden" name="pageNo" id="pageNo" value="${param.pageNo }">
+				<input type="hidden" name="series_id" id="series_id"value="${param.series_id }">
 			</div>	
 			<div id="numList" class="col-3">
 				<select name="amount" class="form-select" id="amount">
-					<option value="10" ${param.amount eq '10' ? 'selected':''}>10개씩 보기</option>
+					<option value="5" ${param.amount eq '5' ? 'selected':''}>5개씩 보기</option>
+					<option value="10" ${param.amount eq '10' ? 'selected':''} selected>10개씩 보기</option>
 					<option value="15" ${param.amount eq '15' ? 'selected':''}>15개씩 보기</option>
 				</select>
 			</div>
@@ -99,7 +100,7 @@
 			  <th scope="col">조회수</th>
 		  </tr>
 	  </thead>
-		<tbody >
+		<tbody id="tbody">
 			<c:forEach items="${map.list }" var="episodes">
 				<tr data-no="${episodes.episode_id }" >
 				    <th scope="row">${episodes.episode_num }</th>
@@ -118,5 +119,6 @@
 <hr> 
 <%@include file="/WEB-INF/views/common/pageNavi.jsp" %>
 </body>
+<script type="text/javascript" src="resources/js/detailSer.js"></script>
 <%@include file="/WEB-INF/views/common/footer.jsp" %>
 </html>

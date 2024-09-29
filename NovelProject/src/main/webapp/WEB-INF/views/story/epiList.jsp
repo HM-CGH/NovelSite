@@ -14,6 +14,7 @@ window.addEventListener('load', function(){
 	insertBtn.addEventListener('click', function(){
 		location.href='/insertEpi';
 	})
+	
 	let trList = document.querySelectorAll('tr');
 	trList.forEach(function(item){
 		item.addEventListener('click', function(){
@@ -21,19 +22,6 @@ window.addEventListener('load', function(){
 			location.href='/detailEpi?episode_id='+no+'&pageNo=${map.pageDto.pageNo}';
 		})
 	})	
-	
-	let amount = document.querySelector("#amountSelect");
-	amount.addEventlistener('change', function(){
-		let data={
-				'searchField' : searchField.value,
-				'searchWord' : searchWord.value,
-				'pageNo' : pageNo.value,
-				'amount' : amountSelect.value
-			}
-		fetch("/resEpiList")
-			.then((response) => response.json())
-			.then((data) => console.log(data))
-	})
 	
 	
 })
@@ -55,7 +43,7 @@ function go(pageNo){
 				</select>
 			</div>
 			<div class="col-5">
-				<input name="searchWord" value="${param.searchWord }" type="search" class="form-control" >
+				<input name="searchWord" id="searchWord"value="${param.searchWord }" type="search" class="form-control" >
 			</div>
 			<div class="text-end">
 				<button onclick='go(1)' class="btn btn-outline-secondary" type="submit">검색</button>
@@ -65,7 +53,8 @@ function go(pageNo){
 			</div>	
 			<div style="float: right" class="col-3">
 				<select name="amount" class="form-select" id="amountSelect">
-					<option value="10" ${param.amount eq '10' ? 'selected':''}>10개씩 보기</option>
+					<option value="5" ${param.amount eq '5' ? 'selected':''}>5개씩 보기</option>
+					<option value="10" ${param.amount eq '10' ? 'selected':''} selected>10개씩 보기</option>
 					<option value="15" ${param.amount eq '15' ? 'selected':''}>15개씩 보기</option>
 				</select>
 			</div>
@@ -92,14 +81,14 @@ function go(pageNo){
 			</c:when>
 			<c:otherwise>
 				<c:forEach items="${map.list }" var="episodes">
-					<tr data-no="${episodes.episode_id }">
+					<tr  data-no="${episodes.episode_id }">
 						<th scope="row">${episodes.rn }</th>
-						<td style="width: 200px">${episodes.series_id }</td>
-						<td>${episodes.episode_num }</td>
-						<td>${episodes.title }</td>
-						<td>${episodes.user_id}</td>
-						<td>${episodes.counts}</td>
-						<td>${episodes.created_date }</td>
+						<td >${episodes.series_id }</td>
+						<td >${episodes.episode_num }</td>
+						<td >${episodes.title }</td>
+						<td >${episodes.user_id}</td>
+						<td >${episodes.counts}</td>
+						<td >${episodes.created_date }</td>
 					</tr>
 				</c:forEach>
 			</c:otherwise>
@@ -111,8 +100,10 @@ function go(pageNo){
 </div>
 </div>
 <hr>
+
 <%@include file="/WEB-INF/views/common/pageNavi.jsp" %>
 </body>
+<script type="text/javascript" src="/resources/js/epiList.js"></script>
 <%@include file="/WEB-INF/views/common/footer.jsp" %>
 </html>
 

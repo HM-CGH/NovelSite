@@ -32,7 +32,7 @@ public class UserController {
 	@GetMapping(value="/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();
-		return "/main";
+		return "redirect:/main";
 	}
 	
 	

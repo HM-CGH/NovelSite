@@ -102,6 +102,21 @@
 	<select id="getSerEpiList">
 		select *
 		from(select rownum rn, t.*
+			from(select episode_id, series_id, title, episode_num, user_id, decode(to_char(created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(created_date,'hh24:mi:ss'), to_char(created_date,'yyyy-mm-dd')) created_date, counts
+				from(select episode_id, s.title series_id, e.title title, episode_num, user_id, e.created_date created_date, counts
+	                from episodes e, series s
+	                where e.series_id = s.series_id
+	                and e.series_id = #{series_id})
+				<if test="cri.searchField != '' and cri.searchField != ''">
+					where ${cri.searchField} like '%${cri.searchWord}%'
+				</if>
+					order by created_date desc) t)
+		where rn between ((#{cri.pageNo}*#{cri.amount})-(#{cri.amount}-1)) and (#{cri.pageNo}*#{cri.amount})
+	
+	</select>
+	<!-- 
+		select *
+		from(select rownum rn, t.*
 			from(select *
 				from(select episode_id, s.title series_id, e.title title, episode_num, user_id, decode(to_char(e.created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(e.created_date,'hh24:mi:ss'), to_char(e.created_date,'yyyy-mm-dd')) created_date, counts
 	                from episodes e, series s
@@ -113,8 +128,8 @@
 				order by created_date desc) t)
 		where rn between ((#{cri.pageNo}*#{cri.amount})-(#{cri.amount}-1)) and (#{cri.pageNo}*#{cri.amount})
 	
-	</select>
-
+	
+	 -->
 
 	<select id="totalSerEpiCnt">
 		select count(*)

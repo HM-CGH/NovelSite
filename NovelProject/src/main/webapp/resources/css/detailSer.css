@@ -1,7 +1,7 @@
 @charset "UTF-8";
 #container{
 	width: 800px;
-	height: 1000px;
+	max-height: 1200px;
 	margin: 0px auto;
 	text-align: center;
 }
@@ -23,7 +23,8 @@
 	float: right;
 }
 #regBtn{
-	float: right;
+	display: flex;
+	justify-content: flex-end;
 }
 #container > .table> tbody > tr:nth-child(2), #container > .table> tbody > td:nth-child(2){
 	width : 400px;

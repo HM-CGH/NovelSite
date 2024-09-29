@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,11 +43,33 @@ public class RestSerController {
 	
 	
 	@GetMapping(value="/resEpiList")
-	public  ResponseEntity<Map<String, Object>> resEpiList(@RequestBody CriteriaDto cri, Model model) {
+	public  ResponseEntity<Map<String, Object>> resEpiList(@ModelAttribute CriteriaDto cri) {
 		// series_id 정보 가져가서 해당되는 epi list 조회해서 map에 담기. 회차검색위해 검색어 필요.
 		
 		Map<String, Object> map = ser.getEpiList(cri);
-		model.addAttribute("map", map);
+		
+		
+		
+		return ResponseEntity.ok(map); 
+	}
+	
+	@GetMapping(value="/resSerList")
+	public  ResponseEntity<Map<String, Object>> resSerList(@ModelAttribute CriteriaDto cri) {
+		// series_id 정보 가져가서 해당되는 epi list 조회해서 map에 담기. 회차검색위해 검색어 필요.
+		
+		Map<String, Object> map = ser.getSerList(cri);
+		
+		
+		
+		return ResponseEntity.ok(map); 
+	}
+	
+	@GetMapping(value="/resDetailSer")
+	public  ResponseEntity<Map<String, Object>> resDetailSer(@ModelAttribute CriteriaDto cri, @RequestParam("series_id") String series_id) {
+		// series_id 정보 가져가서 해당되는 epi list 조회해서 map에 담기. 회차검색위해 검색어 필요.
+		
+		Map<String, Object> map = ser.getSerEpiList(series_id, cri);;
+		
 		
 		
 		return ResponseEntity.ok(map); 

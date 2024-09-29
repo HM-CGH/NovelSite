@@ -24,12 +24,14 @@
 #containerEpi{
 	width: 800px;
 	min-height: 650px;
-	max-height:1300px;
+	max-height: 1100px;
+	
 	margin: 0px auto;
 	text-align: center;
 }
 #regSer{
-	float: right;
+	display: flex;
+	justify-content: flex-end;
 }
 #numList{
 	display:flex;
