@@ -43,13 +43,13 @@
 		<div class="input-group" id="numList">
 			<div class="col-2">
 				<select name="searchField" class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-					<option value="category_id" ${param.searchField eq 'category_id' ? 'selected':''}>장르</option>
+					<option value="category_name" ${param.searchField eq 'category_name' ? 'selected':''}>장르</option>
 					<option value="user_id" ${param.searchField eq 'user_id' ? 'selected':''}>작가</option>
 					<option value="title" ${param.searchField eq 'title' ? 'selected':''}>제목</option>
 				</select>
 			</div>
 			<div class="col-5">
-				<input name="searchWord" id="searchWord"value="${param.searchWord }" type="search" class="form-control" >
+				<input name="searchWord" id="searchWord"value="${param.searchWord }" type="search" class="form-control">
 			</div>
 			<div class="text-end">
 				<button onclick='go(1)' class="btn btn-outline-secondary" type="submit">검색</button>
@@ -81,7 +81,7 @@
 			<c:forEach items="${map.list }" var="series">
 				<tr data-no="${series.series_id }">
 					<th scope="row">${series.rn }</th>
-					<td>${series.category_id }</td>
+					<td>${series.category_name }</td>
 					<td>${series.title }</td>
 					<td>${series.description }</td>
 					<td>${series["user_id"]}</td>

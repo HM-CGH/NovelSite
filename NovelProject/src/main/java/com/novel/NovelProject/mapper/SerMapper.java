@@ -18,7 +18,10 @@ public interface SerMapper {
 
 	// 시리즈 조회 (최신 업데이트 순으로)
 	public List<SerDto> getSerList(CriteriaDto cri);
-
+	
+	// 총 시리즈 조회
+	public int totalSerListCnt(CriteriaDto cri);
+	
 	// 총 시리즈 조회
 	public int totalCnt(CriteriaDto cri);
 

@@ -33,6 +33,15 @@ public class UserService {
 	BCryptPasswordEncoder encoder; 
 	
 	
+	//회원가입처리
+	public int insertUser(UserDto userDto) {
+		String newPW = encoder.encode(userDto.getPassword()); // 비밀번호 암호화
+		userDto.setPassword(newPW);	// 암호화한 비밀번호 적용
+		int num = mapper.insertUser(userDto); // 적용한 회원정보 DB에 삽입
+		return num;
+	}
+	
+	
 	//로그인처리
 	public UserDto getUser(UserDto userDto) {
 		UserDto user = mapper.getUser(userDto);
@@ -54,13 +63,7 @@ public class UserService {
 		return dto;
 	}
 
-	//회원가입처리
-	public int insertUser(UserDto userDto) {
-		String newPW = encoder.encode(userDto.getPassword()); 
-		userDto.setPassword(newPW);	
-		int num = mapper.insertUser(userDto);
-		return num;
-	}
+	
 
 	// 아이디 찾기
 	public UserDto findId(UserDto user) {
@@ -76,12 +79,10 @@ public class UserService {
 	public Map<String, Object> getMainPage() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<EpiDto> Elist = Emapper.getMainPage();
-		System.out.println("userSer epiList : "+Elist);
 		List<FileDto> Flist = Fmapper.getMainFile(); 
-		System.out.println("userSer FileList : "+Flist);
-		
 		map.put("Elist", Elist);
 		map.put("Flist", Flist);
+		
 		return map;
 	}
 

@@ -58,10 +58,10 @@
 			    	<td></td>
 			    	<td style="text-align: right;">
 						<c:if test="${sessionScope.userDto.user_id eq map.epiDto.user_id}">
-				    		<a href="/updateEpi?episode_id=${map.epiDto.episode_id}">수정</a> |
+				    		<a href="/updateEpi?episode_id=${map.epiDto.episode_id}">수정</a> 
 				    		<form action="/delEpi" id="delform" name="delform" enctype="multipart/form-data" method="post">
 				    			<input type="hidden" name="episode_id" value="${map.epiDto.episode_id}">
-				    			<button class="btn btn-secondary" id="delEpi" type="button">삭제</button> |
+				    			<button class="btn btn-secondary" id="delEpi" type="button">삭제</button> 
 				    		</form>
 						</c:if>
 			    		<a href="/epiList?pageNo=${param.pageNo}">목록으로</a>

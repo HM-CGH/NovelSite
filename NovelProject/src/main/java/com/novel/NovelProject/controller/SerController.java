@@ -113,14 +113,12 @@ public class SerController {
 	}
 	
 	
-	// 시리즈 목록 클릭 > 시리즈회차목록으로 이동
+	// 시리즈목록 클릭 > 시리즈회차목록으로 이동
 	@GetMapping(value="/detailSer")
 	public String detailSer(CriteriaDto cri, @RequestParam("series_id") String series_id, Model model) {
-		// series_id 정보 가져가서 해당되는 epi list 조회해서 map에 담기. 회차검색위해 검색어 필요.
-		//System.out.println("cri.getSearchField : "+ cri.getSearchField());
 		Map<String, Object> map = ser.getSerEpiList(series_id, cri);
 		model.addAttribute("map", map);
-		return "/story/detailSer"; //이걸 redirect:/detailSer로 보내봐 
+		return "/story/detailSer";
 	}
 	
 	

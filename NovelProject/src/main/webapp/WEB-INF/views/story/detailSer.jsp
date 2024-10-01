@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>이야기 상세보기</title>
+<title>작품 상세보기</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <link href="resources/css/detailSer.css"  rel="stylesheet">
 </head>
@@ -33,7 +33,7 @@
 </script>
 <body>
 <div id="container">
-	<h1>목록</h1>
+	<h1>작품 상세보기</h1>
 	<table  class="table" >
 		<tr>
 			<td rowspan="5" id="table_thumb">
@@ -53,7 +53,7 @@
 			<td class="text-start align-middle">${map.serDto.title }</td>
 		</tr>
 		<tr>
-			<td class="text-start align-middle">${map.cateDto.name }</td>
+			<td class="text-start align-middle">${map.cateDto.category_name }</td>
 		</tr>
 		<tr>
 			<td class="text-start align-middle">${map.serDto.user_id }</td>

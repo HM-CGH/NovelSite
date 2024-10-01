@@ -7,18 +7,47 @@
 <mapper namespace="com.novel.NovelProject.mapper.SerMapper">
 	
 	<!-- 시리즈 리스트 조회 -->
-	<select id="getSerList">
-		select *
-		from(select rownum rn, t.*
-			from(select series_id, name category_id, user_id, title, s.description, s.created_date 
-				from series s
-				join categories c using (category_id)
-				<if test="searchField != '' and searchField != ''">
-					where ${searchField} like '%${searchWord}%'
-				</if>
-				order by s.created_date desc) t)
+	<select id="getSerList" flushCache="true" useCache="false">
+		
+		select rn, series_id, category_name, user_id, title, description, created_date
+		from(select rownum rn, series_id, category_name, user_id, title, description, created_date
+		    from(select series_id, c.category_name category_name, user_id, title, s.description description, s.created_date created_date
+		        from series s
+		        join categories c on s.category_id=c.category_id
+				<choose>
+		            <when test="searchField == 'category_name'">
+		                where c.category_name like '%' || #{searchWord} || '%'
+		            </when>
+		            <when test="searchField == 'title'">
+		                where s.title like '%' || #{searchWord} || '%'
+		            </when>
+		            <when test="searchField == 'user_id'">
+		                where s.user_id like '%' || #{searchWord} || '%'
+		            </when>
+		        </choose>
+				order by created_date desc))
 		where rn between ((#{pageNo}*#{amount})-(#{amount}-1)) and (#{pageNo}*#{amount})
 	</select>
+	
+	
+	<!-- 검색어에 따른 시리즈+카테고리의 총 게시물 수 조회 -->
+	<select id="totalSerListCnt">
+		select count(*) 
+		from series s
+        join categories c on s.category_id=c.category_id
+			<choose>
+	            <when test="searchField == 'category_name'">
+	                where c.category_name like '%' || #{searchWord} || '%'
+	            </when>
+	            <when test="searchField == 'title'">
+	                where s.title like '%' || #{searchWord} || '%'
+	            </when>
+	            <when test="searchField == 'user_id'">
+	                where s.user_id like '%' || #{searchWord} || '%'
+	            </when>
+	        </choose>
+	</select>
+
 
 	<!-- 검색어에 따른 총 게시물 수 조회 -->
 	<select id="totalCnt">
@@ -28,10 +57,10 @@
 			</if>
 	</select>
 
+
 	<!-- 유저가 작성한 시리즈 조회 -->
 	<select id="getUserSerList">
 		select * from series where user_id = #{user_id}
-	
 	</select>
 	
 	
@@ -50,13 +79,11 @@
 	  		select 'SER'||LPAD(SEQ_SER_ID.NEXTVAL, 5, '0') from dual
 	  	</selectKey>
 		INSERT INTO SERIES (series_id, category_id, user_id, title, description, created_date) 
-				VALUES(#{series_id}, #{category_id}, #{user_id}, #{title}, #{description}, SYSDATE)
+			VALUES(#{series_id}, #{category_id}, #{user_id}, #{title}, #{description}, SYSDATE)
 	</insert>
 	
 	<!-- 에피소드 총 갯수 -->
 	<select id="totalEpiCnt">
-		
-
 	select count(*)
 	from(select episode_id, s.title series_id, e.title title, episode_num, user_id, e.created_date created_date, counts
            from episodes e, series s
@@ -70,14 +97,12 @@
            </when>
            <otherwise>
            </otherwise>
-       </choose>
-				
+       </choose>	
 	</select>
 
 
 	<!-- 에피소드 리스트 조회 -->
 	<select id="getEpiList">
-	
 		select *
 	         from(select rownum rn, episode_id, series_id, title,episode_num, user_id, counts, decode(to_char(created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(created_date,'hh24:mi:ss'), to_char(created_date,'yyyy-mm-dd')) created_date 
 	             from(select *
@@ -98,11 +123,12 @@
 	   	where rn between ((#{pageNo}*#{amount})-(#{amount}-1)) and (#{pageNo}*#{amount})
 	</select>
 
+
 	<!-- 시리즈별 에피소드 조회 -->
 	<select id="getSerEpiList">
-		select *
-		from(select rownum rn, t.*
-			from(select episode_id, series_id, title, episode_num, user_id, decode(to_char(created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(created_date,'hh24:mi:ss'), to_char(created_date,'yyyy-mm-dd')) created_date, counts
+		select rn, episode_id, series_id, title, episode_num, user_id,decode(to_char(created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(created_date,'hh24:mi:ss'), to_char(created_date,'yyyy-mm-dd')) created_date, counts
+		from(select rownum rn, episode_id, series_id, title, episode_num, user_id,created_date, counts
+			from(select episode_id, series_id, title, episode_num, user_id, created_date, counts
 				from(select episode_id, s.title series_id, e.title title, episode_num, user_id, e.created_date created_date, counts
 	                from episodes e, series s
 	                where e.series_id = s.series_id
@@ -114,22 +140,7 @@
 		where rn between ((#{cri.pageNo}*#{cri.amount})-(#{cri.amount}-1)) and (#{cri.pageNo}*#{cri.amount})
 	
 	</select>
-	<!-- 
-		select *
-		from(select rownum rn, t.*
-			from(select *
-				from(select episode_id, s.title series_id, e.title title, episode_num, user_id, decode(to_char(e.created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(e.created_date,'hh24:mi:ss'), to_char(e.created_date,'yyyy-mm-dd')) created_date, counts
-	                from episodes e, series s
-	                where e.series_id = s.series_id
-	                and e.series_id = #{series_id})
-				<if test="cri.searchField != '' and cri.searchField != ''">
-					where ${cri.searchField} like '%${cri.searchWord}%'
-				</if>
-				order by created_date desc) t)
-		where rn between ((#{cri.pageNo}*#{cri.amount})-(#{cri.amount}-1)) and (#{cri.pageNo}*#{cri.amount})
 	
-	
-	 -->
 
 	<select id="totalSerEpiCnt">
 		select count(*)
@@ -165,8 +176,8 @@
 	<delete id="delEpi">
 		delete episodes
 		where episode_id = #{episode_id}
-	
 	</delete>
+	
 	
 	<select id="findEpiNum">
 		select episode_num
@@ -176,35 +187,35 @@
 				where series_id =#{series_id}
 				order by 1 desc) t
 			where rownum = 1)
-	
 	</select>
+	
 	
 	<select id="getSeries">
 		select series_id
 		from episodes
 		where episode_id=#{episode_id}
-	
 	</select>
 	
 	
 	<select id="getPrevEpi">
 		select *
-		from (select episode_id, e.series_id series_id, e.title title, s.title ser_title, episode_num, user_id, content, decode(to_char(e.created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(e.created_date,'hh24:mi:ss'), to_char(e.created_date,'yyyy-mm-dd')) created_date, counts
+		from (select episode_id, e.series_id series_id, e.title title, s.title ser_title, episode_num, user_id, content
+				, decode(to_char(e.created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(e.created_date,'hh24:mi:ss'), to_char(e.created_date,'yyyy-mm-dd')) created_date, counts
              from episodes e, series s
              where e.series_id = s.series_id)
 		where series_id=#{series_id}
 		and episode_num=#{episode_num}-1
-	
 	</select>
+	
 	
 	<select id="getNextEpi">
 		select *
-		from (select episode_id, e.series_id series_id, e.title title, s.title ser_title, episode_num, user_id, content, decode(to_char(e.created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(e.created_date,'hh24:mi:ss'), to_char(e.created_date,'yyyy-mm-dd')) created_date, counts
+		from (select episode_id, e.series_id series_id, e.title title, s.title ser_title, episode_num, user_id, content
+				, decode(to_char(e.created_date,'yyyy-mm-dd'), to_char(sysdate,'yyyy-mm-dd'), to_char(e.created_date,'hh24:mi:ss'), to_char(e.created_date,'yyyy-mm-dd')) created_date, counts
              from episodes e, series s
              where e.series_id = s.series_id)
 		where series_id=#{series_id}
 		and episode_num=#{episode_num}+1
-	
 	</select>
 	
 	
@@ -212,7 +223,6 @@
 		select count(*)
 		from episodes
 		where series_id = #{series_id}
-	
 	</select>
 	
 	
@@ -222,12 +232,15 @@
 		where series_id = #{series_id}
 	</select>
 	
+	
 	<select id="getCateName">
-		select c.category_id category_id, name
+		select c.category_id category_id, category_name
 		from categories c, series s
 		where c.category_id = s.category_id
 		and series_id = #{series_id}
 	</select>
+	
+	
 	<select id="getMainPage">
 		SELECT EPISODE_ID, SERIES_ID, SER_TITLE, TITLE, EPISODE_NUM, CONTENT, CREATED_DATE, COUNTS
 		FROM(SELECT EPISODE_ID, E.SERIES_ID, S.TITLE SER_TITLE, E.TITLE TITLE, EPISODE_NUM, CONTENT, E.CREATED_DATE CREATED_DATE, COUNTS

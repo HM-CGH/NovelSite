@@ -7,6 +7,7 @@
 }
 #table_thumb{
 	width: 250px;
+	object-fit:none;
 }
 #searchForm{
 	width: 800px;
@@ -31,4 +32,8 @@
 }
 #container > .table> tbody th{
 	width: 80px;
+}
+.imgBox{
+	width: 250px;
+	height: 300px;
 }

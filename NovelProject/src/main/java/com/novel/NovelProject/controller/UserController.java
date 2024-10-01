@@ -67,18 +67,11 @@ public class UserController {
 	}
 	
 	
-	
-	
-	
 	@GetMapping(value="/signup")
 	public String signup() {
 		return "/login/signup";
 		
 	}
-	
-	
-	
-	
 	
 	
 	@GetMapping(value="/signupAction")

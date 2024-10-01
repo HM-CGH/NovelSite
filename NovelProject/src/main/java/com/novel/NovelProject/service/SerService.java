@@ -35,12 +35,13 @@ public class SerService {
 	// 시리즈 목록조회
 	public Map<String, Object> getSerList(CriteriaDto cri) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		int totalCnt = mapper.totalCnt(cri);
+		int totalCnt = mapper.totalSerListCnt(cri); // 게시물 리스트의 총 갯수 가져오기
 		PageDto pageDto = new PageDto(totalCnt, cri.getPageNo(), cri.getAmount());
 		map.put("pageDto", pageDto);
 		map.put("list", mapper.getSerList(cri));
 		return map;
 	}
+	
 	
 	// 에피소드 목록 조회
 	public Map<String, Object> getEpiList(CriteriaDto cri) {
@@ -93,6 +94,7 @@ public class SerService {
 		return map;
 	}
 
+	
 	// 카테고리 조회
 	public List<CateDto> getCate() {
 		return mapper.getCate();
@@ -135,20 +137,24 @@ public class SerService {
 	
 	
 	// 시리즈별 에피소드 조회
-	public Map<String, Object> getSerEpiList(String series_id, @Param("cri") CriteriaDto cri) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		SerDto serDto = mapper.getSerDto(series_id); // 시리즈 정보 가져오기
-		List<FileDto> Flist = fileService.getFile("series", serDto.getSeries_id()); // series 이미지 가져오기
-		List<EpiDto> list =  mapper.getSerEpiList(series_id, cri);
+	public Map<String, Object> getSerEpiList(String series_id, @Param("cri") CriteriaDto cri) { // 페이지정보를 cri에 담아 받아옴
+		
+		SerDto serDto = mapper.getSerDto(series_id); // 파라미터 series_id로 serDto 가져오기
+		List<FileDto> Flist = fileService.getFile("series", serDto.getSeries_id()); // series 이미지파일 가져오기
+		List<EpiDto> list =  mapper.getSerEpiList(series_id, cri); // series_id에 해당되는 회차목록 가져오기
+		int totalCnt = mapper.totalSerEpiCnt(series_id, cri); // 시리즈에 있는 에피소드 갯수(페이지 변수O)
 		CateDto cateDto = mapper.getCateName(series_id);
-		int lastNum = 0;
-		if(mapper.getSerEpiNum(series_id) ==0) {
-			lastNum = 0;
+		PageDto pageDto = new PageDto(totalCnt, cri.getPageNo(), cri.getAmount()); // 페이지Dto 생성
+		int lastNum = 0; // 시리즈의 마지막 회차 번호
+		
+		if(mapper.getSerEpiNum(series_id) ==0) { // 시리즈에 있는 에피소드 갯수(페이지 변수X) 
+			lastNum = 0;// 시리즈는 존재하지만 회차가 하나도 없는 경우. 
 		}else {
 			lastNum = mapper.getSerEpiNum(series_id);
 		}
-		int totalCnt = mapper.totalSerEpiCnt(series_id, cri);
-		PageDto pageDto = new PageDto(totalCnt, cri.getPageNo(), cri.getAmount());
+		
+		// 시리즈별 에피소드 조회하기 위한 값을 map에 담기
+		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("cateDto", cateDto);
 		map.put("serDto", serDto);
 		map.put("Flist", Flist);
@@ -201,7 +207,6 @@ public class SerService {
 			epiDto.setEpisode_num(Integer.parseInt(mr.getParameter("episode_num")));
 			String content = mr.getParameter("content");
 			epiDto.setContent(mr.getParameter("content"));
-			
 			
 			// series 테이블 업데이트(selectKey 적용)
 			int resEpi = mapper.updateEpi(epiDto);
@@ -260,6 +265,7 @@ public class SerService {
 		return res;
 	}
 	
+	
 	// 에피소드 아이디로 시리즈 아이디만 구하기
 	public String getSeries(String episode_id) {
 		String series = "";
@@ -269,12 +275,14 @@ public class SerService {
 		return series;
 	}
 	
+	
 	// 시리즈 아이디와 회차로 이전회차 불러오기
 	public EpiDto getPrevEpi(String series_id, int episode_num) {
 		EpiDto epi = mapper.getPrevEpi(series_id, episode_num);
 		return epi;
 	}
 
+	
 	// 시리즈 아이디와 회차로 다음회차 불러오기
 	public EpiDto getNextEpi(String series_id, int episode_num) {
 		EpiDto epi = mapper.getNextEpi(series_id, episode_num);

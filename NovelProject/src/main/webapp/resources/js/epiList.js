@@ -20,12 +20,8 @@ amountSelect.addEventListener('change', function(){
 	let url = '/resEpiList?searchField='+encodeURIComponent(searchField.value)+'&searchWord='
 			+encodeURIComponent(searchWord.value)+'&pageNo='+encodeURIComponent(pageNo)+'&amount='+encodeURIComponent(amountValue);
 	console.log('url : '+url)
-	fetch(url, {
-	    method: 'GET',
-	    headers: {
-	        'Content-Type': 'application/json', // GET 요청에서는 보통 필요하지 않음
-	    }
-	})
+	
+	fetch(url)
 	.then((response) => response.json())
 	.then(data => {
 	
@@ -42,37 +38,20 @@ amountSelect.addEventListener('change', function(){
 	        tr.appendChild(td);
 		}else{
 			data.list.forEach(function(item) {
-				let tr = document.createElement("tr");
-		        tr.dataset.no=item.episode_id;
-		        tbody.appendChild(tr);
-		        
-		        let th = document.createElement("th");
-		        th.innerHTML = item.rn;
-		        tr.appendChild(th);
-		        
-		        let td_series_id = document.createElement("td");
-		        td_series_id.innerHTML = item.series_id;
-		        tr.appendChild(td_series_id);
-		        
-		        let td_episode_num = document.createElement("td");
-		        td_episode_num.innerHTML = item.episode_num;
-		        tr.appendChild(td_episode_num);
-		        
-		        let td_title = document.createElement("td");
-		        td_title.innerHTML = item.title;
-		        tr.appendChild(td_title);
-		        
-		        let td_user_id = document.createElement("td");
-		        td_user_id.innerHTML = item.user_id;
-		        tr.appendChild(td_user_id);
-		        
-		        let td_counts = document.createElement("td");
-		        td_counts.innerHTML = item.counts;
-		        tr.appendChild(td_counts);
-		        
-		        let td_created_date = document.createElement("td");
-		        td_created_date.innerHTML = item.created_date;
-		        tr.appendChild(td_created_date);         
+				
+				let allTr=
+				`
+				<tr  data-no="${item.episode_id }">
+					<th scope="row">${item.rn }</th>
+					<td >${item.series_id }</td>
+					<td >${item.episode_num }</td>
+					<td >${item.title }</td>
+					<td >${item.user_id}</td>
+					<td >${item.counts}</td>
+					<td >${item.created_date }</td>
+				</tr>
+				`
+				tbody.appendChild(allTr);
 			})
 		}
 	})//fetch 끝 
