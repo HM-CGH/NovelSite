@@ -42,7 +42,6 @@ public class MvcConfiguration implements WebMvcConfigurer{
 		registry.addInterceptor(new loginIntercepter())
 			.order(1)
 			.addPathPatterns("/story/insert**");
-		System.out.println("=====================");
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}
 	

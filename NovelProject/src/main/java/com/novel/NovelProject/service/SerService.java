@@ -78,9 +78,6 @@ public class SerService {
 			epiDto.setContent(mr.getParameter("content"));
 			int regEpires = mapper.regEpi(epiDto);
 			
-			System.out.println("SerService, epiDto : "+ epiDto);
-			
-			
 			FileDto file = new FileDto();
 			file.setType("episodes");
 			file.setType_id(epiDto.getEpisode_id());
@@ -119,7 +116,6 @@ public class SerService {
 			
 			// series 테이블 업데이트(selectKey 적용)
 			int regEpires = mapper.regSer(serDto);
-			System.out.println("SerService serDto : " + serDto);
 			
 			// file 테이블 업데이트
 			FileDto file = new FileDto();
@@ -197,7 +193,6 @@ public class SerService {
 			}else {
 				
 				resFile = fileService.delfile("episodes", mr.getParameter("episode_id"));
-				System.out.println("mr.getParameter(\"episode_id\") : " + mr.getParameter("episode_id"));
 			}
 			
 			EpiDto epiDto = new EpiDto();
@@ -210,7 +205,6 @@ public class SerService {
 			
 			// series 테이블 업데이트(selectKey 적용)
 			int resEpi = mapper.updateEpi(epiDto);
-			System.out.println("SerService serDto : " + epiDto);
 			
 			
 			FileDto file = new FileDto();
@@ -240,7 +234,6 @@ public class SerService {
 		MultipartRequest mr;
 		try {
 			mr = new MultipartRequest(request, Direct, maxSize, encoding);
-			System.out.printf("mr.getParameter(episode_id) : ", mr.getParameter("episode_id"));
 			resFile = fileService.delfile("episodes", mr.getParameter("episode_id"));
 			resEpi = mapper.delEpi(mr.getParameter("episode_id"));
 		} catch (IOException e) {
@@ -255,7 +248,6 @@ public class SerService {
 	
 	// 새 글 작성시 에피소드 회차 조회하기 위한 메서드
 	public int findEpiNum(SerDto serDto) {
-		System.out.println("serservice finedpinum seris_id"+serDto);
 		int res = 1;
 		if(mapper.findEpiNum(serDto)==null || mapper.findEpiNum(serDto)==0) {
 			res=1;
@@ -286,7 +278,6 @@ public class SerService {
 	// 시리즈 아이디와 회차로 다음회차 불러오기
 	public EpiDto getNextEpi(String series_id, int episode_num) {
 		EpiDto epi = mapper.getNextEpi(series_id, episode_num);
-		System.out.println("service-epi : "+epi);
 		return epi;
 	}
 

@@ -26,7 +26,6 @@ public class UserController {
 	@Autowired
 	UserService ser;
 	
-	
 	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 	
 	@GetMapping(value="/logout")

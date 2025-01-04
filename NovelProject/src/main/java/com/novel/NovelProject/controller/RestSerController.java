@@ -33,7 +33,6 @@ public class RestSerController {
 		// series_id 정보 가져가서 해당되는 epi list 조회해서 map에 담기. 회차검색위해 검색어 필요.
 		
 		int msg = ser.findEpiNum(serDto);
-		System.out.println("restcon-msg"+msg);
 		HttpHeaders header = new HttpHeaders();
 		header.add("Content-Type", "applcation/json; charset=UTF-8");
 		String jsonMsg = "{\"msg\":\""+msg+"\"}";
@@ -45,10 +44,7 @@ public class RestSerController {
 	@GetMapping(value="/resEpiList")
 	public  ResponseEntity<Map<String, Object>> resEpiList(@ModelAttribute CriteriaDto cri) {
 		// series_id 정보 가져가서 해당되는 epi list 조회해서 map에 담기. 회차검색위해 검색어 필요.
-		
 		Map<String, Object> map = ser.getEpiList(cri);
-		
-		
 		
 		return ResponseEntity.ok(map); 
 	}
@@ -56,9 +52,7 @@ public class RestSerController {
 	@GetMapping(value="/resSerList")
 	public  ResponseEntity<Map<String, Object>> resSerList(@ModelAttribute CriteriaDto cri) {
 		// series_id 정보 가져가서 해당되는 epi list 조회해서 map에 담기. 회차검색위해 검색어 필요.
-		
 		Map<String, Object> map = ser.getSerList(cri);
-		
 		
 		
 		return ResponseEntity.ok(map); 
@@ -67,10 +61,7 @@ public class RestSerController {
 	@GetMapping(value="/resDetailSer")
 	public  ResponseEntity<Map<String, Object>> resDetailSer(@ModelAttribute CriteriaDto cri, @RequestParam("series_id") String series_id) {
 		// series_id 정보 가져가서 해당되는 epi list 조회해서 map에 담기. 회차검색위해 검색어 필요.
-		
 		Map<String, Object> map = ser.getSerEpiList(series_id, cri);;
-		
-		
 		
 		return ResponseEntity.ok(map); 
 	}

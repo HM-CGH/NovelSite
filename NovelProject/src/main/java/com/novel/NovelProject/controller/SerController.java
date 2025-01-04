@@ -171,9 +171,7 @@ public class SerController {
 	@GetMapping(value="/detailPrev")
 	public String dePrev(@RequestParam("episode_id") String episode_id, @RequestParam("episode_num") int episode_num, Model model) {
 		String series_id = ser.getSeries(episode_id);
-		System.out.println("sereis_id : "+series_id);
 		EpiDto epi = ser.getPrevEpi(series_id, episode_num);
-		System.out.println("epi : "+epi);
 		int res = mapper.upCount(epi.getEpisode_id());
 		Map<String, Object> map = new HashMap<String, Object>();
 		int lastNum = 0;
@@ -191,9 +189,7 @@ public class SerController {
 	@GetMapping(value="/detailNext")
 	public String deNext(@RequestParam("episode_id") String episode_id, @RequestParam("episode_num") int episode_num, Model model) {
 		String series_id = ser.getSeries(episode_id);
-		// System.out.println("sereis_id : "+series_id);
 		EpiDto epi = ser.getNextEpi(series_id, episode_num);
-		System.out.println("epi : "+epi);
 		int res = mapper.upCount(epi.getEpisode_id());
 		Map<String, Object> map = new HashMap<String, Object>();
 		int lastNum = 0;

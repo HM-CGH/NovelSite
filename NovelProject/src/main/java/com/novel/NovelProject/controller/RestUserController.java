@@ -26,12 +26,9 @@ public class RestUserController {
 	@Autowired
 	UserService ser;
 	
-	
-	
 	@PostMapping(value="/findId")
 	public ResponseEntity<String> findId(@RequestBody UserDto user){
 		String msg="";
-		System.out.println("========="+user);
 		if(user.getUser_name() == null || "".equals(user.getUser_name())
 				|| user.getEmail() == null || "".equals(user.getEmail())) {
 			msg="필요한 정보를 모두 입력해주세요. ";
@@ -55,7 +52,6 @@ public class RestUserController {
 	@PostMapping(value="/findPw")
 	public ResponseEntity<String> findPw(@RequestBody UserDto user){
 		String msg="";
-		System.out.println("========="+user);
 		if(user.getUser_name() == null || "".equals(user.getUser_name())
 				|| user.getEmail() == null || "".equals(user.getEmail())
 				|| user.getUser_id() == null || "".equals(user.getUser_id())) {
@@ -79,10 +75,9 @@ public class RestUserController {
 	
 	@GetMapping("/checkId")
 	public ResponseEntity<String> checkId(UserDto userDto) {
-		System.out.println(userDto.getUser_id());
 		String msg = "";
 		UserDto user = ser.checkId(userDto);
-		System.out.println("userDto : " + userDto.getUser_id());
+		
 		if(user == null) {
 			msg = "";
 			//model.addAttribute("msg", msg);
